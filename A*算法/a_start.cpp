@@ -2,17 +2,19 @@
 #include <vector>
 #include <queue>
 #include<algorithm>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
-
-vector<vector<int >> grid ={
-{0,0,1,1,1,0,0},
-{0,0,0,0,1,0,0},
-{0,0,0,1,1,0,0},
-{0,0,0,1,1,0,0},
-{0,0,0,1,1,0,0},
-{0,0,0,0,0,0,0}
-};
+vector<vector<int >> grid;
+// vector<vector<int >> grid ={
+// {0,0,1,1,1,0,0},
+// {1,0,1,0,1,0,0},
+// {0,0,0,1,1,0,0},
+// {0,0,0,1,1,0,0},
+// {0,0,0,1,1,0,0},
+// {0,0,0,0,0,0,0}
+// };
 
 typedef struct{
     int index;
@@ -67,11 +69,7 @@ void a_start::print()
    
   int currunt_index = end_index; 
   int x,y;
-
-  for(auto f: closeList)
-  {
-      cout << "closelist is "<< f.index <<endl;
-  }
+   bool  find = false;
   while(start_index != currunt_index)
   {
       
@@ -82,9 +80,15 @@ void a_start::print()
                 itov(f.index,x,y);
                 vec[x][y] = '+';
                 currunt_index = f.pindex;
-                cout<< "currunt index "<< f.index  << "p inhdex  "<< currunt_index<<endl;
+                //cout<< "currunt index "<< f.index  << "p inhdex  "<< currunt_index<<endl;
+                find  = true;
                 break;
             }
+        }
+        if(false == find )
+        {
+            cout << "can not find path "<<endl;
+            break;
         }
   }
 
@@ -184,7 +188,7 @@ void a_start::process()
 {
     int x = 0 ,y = 0;
     int currunt_index=0;
-    cout << "start index "<< start_index << "end  index" << end_index <<endl;
+   cout << "start index : "<< start_index << "    end  index :   " << end_index <<endl;
     itov(start_index,x,y);
     factor f;
     f.index = start_index;
@@ -201,7 +205,7 @@ void a_start::process()
          //查找权重最小元素
           for(auto v : openList)
          {
-                cout << "v_index "<< v.index  << "v_weight " << v.weight<<endl;
+              //  cout << "v_index "<< v.index  << "v_weight " << v.weight<<endl;
                 if (v.weight  <  f_temp.weight)
                 {
                      f_temp = v;
@@ -215,7 +219,7 @@ void a_start::process()
          // 将邻居加入到openlist
           addNeighBor(f_temp);
           vectorRm(f_temp);
-          cout << "end" <<endl;
+         // cout << "end" <<endl;
         
     }
 }
@@ -223,10 +227,44 @@ void a_start::process()
 
 int main(int argc,char**argv)
 {
-   a_start  A(0, 34);
-    cout << "process"<<endl;
+  ifstream file("grid.txt",ios::in);
+  if(file.is_open())
+  {
+      string line;
+      while(getline(file,line))
+      {
+          vector <int >vec;
+          stringstream ss;
+          ss << line;
+
+          while(!ss.eof())
+          {
+              int temp;
+              while(ss >> temp)
+              {
+                  vec.push_back(temp);
+              }
+          }
+          grid.push_back(vec);
+      }
+      file.close();
+  }
+  else
+  {
+      cout << "can not open file."<<endl;
+      return  0;
+  }
+  int start ,end;
+  cout << " please input the  start  index "<<endl;
+  cin >> start;
+  cout << "please input end index" <<endl;
+  cin >> end;
+
+
+   a_start  A(start, end);
+    //cout << "process"<<endl;
     A.process();
-    cout <<"print"<<endl;
+ //   cout <<"print"<<endl;
     A.print();
     return 0;
 }
