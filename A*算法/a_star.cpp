@@ -28,14 +28,14 @@ typedef struct{
     int pindex;
 }factor;
 
-class a_start
+class a_star
 {
         private:
         vector<factor>openList,closeList;
         int start_index,end_index;
         public:
-            a_start(int start,int end);
-            ~a_start();
+            a_star(int start,int end);
+            ~a_star();
              inline  int vtoi(int x, int y)
             {
                 return x*grid[0].size() + y;
@@ -53,14 +53,14 @@ class a_start
            void vectorRm(factor f);
            void print();
 };
-     a_start::a_start(int start,int end):start_index(start),end_index(end)
+     a_star::a_star(int start,int end):start_index(start),end_index(end)
      {
 
      }
-    a_start::~a_start()
+    a_star::~a_star()
     {
     }
-void a_start::print()
+void a_star::print()
 {
  #if 1
    //创建动态数组
@@ -107,7 +107,7 @@ for(auto f:vec )
 #endif
 
 }   
-void a_start::vectorRm(factor f)
+void a_star::vectorRm(factor f)
 {
    vector<factor>::iterator it;
    for(it = openList.begin();it!= openList.end();)
@@ -123,13 +123,13 @@ void a_start::vectorRm(factor f)
    }
 
 }
-bool a_start::isNeighBor(factor v1, factor v2)
+bool a_star::isNeighBor(factor v1, factor v2)
 {
     int  diff = abs(v1.index - v2.index );
     return ( diff == 1 ||  diff == grid[0].size());
 }
 
-void a_start::update(factor v)
+void a_star::update(factor v)
 {
     
     for(auto  f : openList)
@@ -145,7 +145,7 @@ void a_start::update(factor v)
             }
     }
 }
-void a_start::addFactor(int x, int y , factor v)
+void a_star::addFactor(int x, int y , factor v)
 {
     if(x <0 || x >= grid.size() || y < 0 || y >= grid[0].size() )
     {
@@ -173,7 +173,7 @@ void a_start::addFactor(int x, int y , factor v)
     openList.push_back(v_temp);
 }
 //将邻居加入到ＯＰＥＮＬＩＳＴ
-void a_start::addNeighBor(factor v)
+void a_star::addNeighBor(factor v)
 {
     int x= 0,y = 0;
     int end_x = 0, end_y = 0;
@@ -184,7 +184,7 @@ void a_start::addNeighBor(factor v)
     addFactor(x,y+1,v);
     addFactor(x,y-1,v);
 }
-void a_start::process()
+void a_star::process()
 {
     int x = 0 ,y = 0;
     int currunt_index=0;
@@ -261,7 +261,7 @@ int main(int argc,char**argv)
   cin >> end;
 
 
-   a_start  A(start, end);
+   a_star  A(start, end);
     //cout << "process"<<endl;
     A.process();
  //   cout <<"print"<<endl;
